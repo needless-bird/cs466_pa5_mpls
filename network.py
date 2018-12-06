@@ -53,10 +53,11 @@ class NetworkPacket:
     ##@param dst: address of the destination host
     # @param data_S: packet payload
     # @param priority: packet priority
-    def __init__(self, dst, data_S, priority=0):
+    def __init__(self, dst, data_S, priority):
         self.dst = dst
         self.data_S = data_S
-        #TODO: add priority to the packet class
+        self.priority = priority
+        
         
     ## called when printing the object
     def __str__(self):
