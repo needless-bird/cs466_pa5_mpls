@@ -209,6 +209,8 @@ class Router:
         #Search through encap table and check for packet priority. If the priority is in the encap table we then store the corrisponding value into label_S
         if pkt.priority in encap_tbl_D:
             label_S = encap_tbl_D[pkt.priority]
+        else
+            raise ('unknown packet priority %s' %pkt.priority)
         #Create a new MPLSFrame with the label_S and network packet
         m_fr = MPLSFrame(label_S, pkt)
 
