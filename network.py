@@ -53,12 +53,13 @@ class MPLSFrame:
     #method to print in sim
     def __str__(self):
         return self.to_byte_S()
-
+    #method to convert MPLSFrame variables into byte string
     def to_byte_S(self):
         byte_S = ''
         byte_S += self.label_S
         byte_S += self.data_S
         return byte_S
+    #method to convert byte string into MPLSFrame variables
     def from_byte_S(self, byte_S):
         label_S = byte_S[ 0 : MPLSFrame.label_S_length ]
         data_S = byte_S[MPLSFrame.label_S_length : ]
@@ -193,9 +194,8 @@ class Router:
                 self.process_network_packet(p, i)
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
-                # m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
-                #for now, we just relabel the packet as an MPLS frame without encapsulation
-                m_fr = p
+                m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
+
                 #send the MPLS frame for processing
                 self.process_MPLS_frame(m_fr, i)
             else:
@@ -205,9 +205,13 @@ class Router:
     #  @param p Packet to forward
     #  @param i Incoming interface number for packet p
     def process_network_packet(self, pkt, i):
-        #TODO: encapsulate the packet in an MPLS frame based on self.encap_tbl_D
-        #for now, we just relabel the packet as an MPLS frame without encapsulation
-        m_fr = pkt
+        label_S
+        #Search through encap table and check for packet priority. If the priority is in the encap table we then store the corrisponding value into label_S
+        if pkt.priority in encap_tbl_D:
+            label_S = encap_tbl_D[pkt.priority]
+        #Create a new MPLSFrame with the label_S and network packet
+        m_fr = MPLSFrame(label_S, pkt)
+
         print('%s: encapsulated packet "%s" as MPLS frame "%s"' % (self, pkt, m_fr))
         #send the encapsulated packet for processing as MPLS frame
         self.process_MPLS_frame(m_fr, i)
