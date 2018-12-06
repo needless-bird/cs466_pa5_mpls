@@ -41,11 +41,35 @@ class Interface:
         else:
             # print('putting packet in the IN queue')
             self.in_queue.put(pkt, block)
-            
-        
+
+class MPLSFrame:
+    # label length
+    label_S_length = 1
+
+    #initialize the MPLS Frame
+    def __init__(self, label_S, data_S):
+        self.label_S = label_S
+        self.data_S = data_S
+    #method to print in sim
+    def __str__(self):
+        return self.to_byte_S()
+
+    def to_byte_S(self):
+        byte_S = ''
+        byte_S += self.label_S
+        byte_S += self.data_S
+        return byte_S
+    def from_byte_S(self, byte_S):
+        label_S = byte_S[ 0 : MPLSFrame.label_S_length ]
+        data_S = byte_S[MPLSFrame.label_S_length : ]
+        return self(label_S, data_S)
+
+
+
 ## Implements a network layer packet
 # NOTE: You will need to extend this class for the packet to include
 # the fields necessary for the completion of this assignment.
+
 class NetworkPacket:
     ## packet encoding lengths 
     dst_S_length = 5
@@ -57,7 +81,7 @@ class NetworkPacket:
         self.dst = dst
         self.data_S = data_S
         self.priority = priority
-        
+
         
     ## called when printing the object
     def __str__(self):
