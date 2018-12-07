@@ -4,7 +4,6 @@ import threading
 from time import sleep
 import sys
 from copy import deepcopy
-from asyncio.windows_events import NULL
 
 ##configuration parameters
 router_queue_size = 0 #0 means unlimited
@@ -33,7 +32,7 @@ if __name__ == '__main__':
 
     encap_tbl_D = {}    
     frwd_tbl_D = [{'inLbl': 'A' ,'outLbl': None, 'dest': 'H2', 'outInt': '1' }, {'inLbl': 'B' ,'outLbl': None, 'dest': 'H2', 'outInt': '1' }]     
-    decap_tbl_D = {}    
+    decap_tbl_D = {'A': 1, 'B': 0}    
     router_b = Router(name='RB', 
                               intf_capacity_L=[500,100],
                               encap_tbl_D = encap_tbl_D,
