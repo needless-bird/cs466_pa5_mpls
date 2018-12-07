@@ -57,12 +57,13 @@ class MPLSFrame:
     def to_byte_S(self):
         byte_S = ''
         byte_S += self.label_S
-        byte_S += self.data_S
+        byte_S += str(self.data_S)
         return byte_S
     #method to convert byte string into MPLSFrame variables
-    def from_byte_S(self, byte_S):
-        label_S = byte_S[ 0 : MPLSFrame.label_S_length ]
-        data_S = byte_S[MPLSFrame.label_S_length : ]
+    def from_byte_S(self, pkt_S):
+        print(pkt_S)
+        label_S = pkt_S[ 0 : MPLSFrame.label_S_length ]
+        data_S = pkt_S[MPLSFrame.label_S_length : ]
         return self(label_S, data_S)
 
 
@@ -91,7 +92,9 @@ class NetworkPacket:
     ## convert packet to a byte string for transmission over links
     def to_byte_S(self):
         byte_S = str(self.dst).zfill(self.dst_S_length)
+        byte_S += str(self.priority)
         byte_S += self.data_S
+        
         return byte_S
     
     ## extract a packet object from a byte string
@@ -99,8 +102,10 @@ class NetworkPacket:
     @classmethod
     def from_byte_S(self, byte_S):
         dst = byte_S[0 : NetworkPacket.dst_S_length].strip('0')
-        data_S = byte_S[NetworkPacket.dst_S_length : ]        
-        return self(dst, data_S)
+        priority = byte_S[NetworkPacket.dst_S_length : (NetworkPacket.dst_S_length + 1)]
+        data_S = byte_S[(NetworkPacket.dst_S_length + 1) : ]  
+        print('*** %s, %s, %s ***' %(dst, priority, data_S))      
+        return self(dst, data_S, priority)
     
 
 ## Implements a network host for receiving and transmitting data
@@ -194,6 +199,7 @@ class Router:
                 self.process_network_packet(p, i)
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
+                print('$*$* %s $*$* %s' %(pkt_S, self.name))
                 m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
 
                 #send the MPLS frame for processing
@@ -205,11 +211,11 @@ class Router:
     #  @param p Packet to forward
     #  @param i Incoming interface number for packet p
     def process_network_packet(self, pkt, i):
-        label_S
+        label_S = None
         #Search through encap table and check for packet priority. If the priority is in the encap table we then store the corrisponding value into label_S
-        if pkt.priority in encap_tbl_D:
-            label_S = encap_tbl_D[pkt.priority]
-        else
+        if pkt.priority in self.encap_tbl_D:
+            label_S = self.encap_tbl_D[pkt.priority]
+        else:
             raise ('unknown packet priority %s' %pkt.priority)
         #Create a new MPLSFrame with the label_S and network packet
         m_fr = MPLSFrame(label_S, pkt)
@@ -227,7 +233,7 @@ class Router:
         print('%s: processing MPLS frame "%s"' % (self, m_fr))
         # for now forward the frame out interface 1
         try:
-            fr = LinkFrame('Network', m_fr.to_byte_S())
+            fr = LinkFrame('MPLS', m_fr.to_byte_S())
             self.intf_L[1].put(fr.to_byte_S(), 'out', True)
             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, 1))
         except queue.Full:
