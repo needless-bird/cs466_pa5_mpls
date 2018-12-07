@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     encap_tbl_D = {}    
     frwd_tbl_D = [{'inLbl': 'A' ,'outLbl': None, 'dest': 'H2', 'outInt': '1' }, {'inLbl': 'B' ,'outLbl': None, 'dest': 'H2', 'outInt': '1' }]     
-    decap_tbl_D = {'A': '1', 'B': '0'}    
+    decap_tbl_D = {'A': '0', 'B': '1'}    
     router_b = Router(name='RB', 
                               intf_capacity_L=[500,100],
                               encap_tbl_D = encap_tbl_D,

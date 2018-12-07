@@ -50,6 +50,9 @@ class MPLSFrame:
     def __init__(self, label_S, data_S):
         self.label_S = label_S
         self.data_S = data_S
+        
+#     def __init__(self, data_S):
+#         self.data_S = data_S
     #method to print in sim
     def __str__(self):
         return self.to_byte_S()
@@ -60,10 +63,10 @@ class MPLSFrame:
         byte_S += str(self.data_S)
         return byte_S
     #method to convert byte string into MPLSFrame variables
-    def from_byte_S(self, pkt_S):
-        print(pkt_S)
-        label_S = pkt_S[ 0 : MPLSFrame.label_S_length ]
-        data_S = pkt_S[MPLSFrame.label_S_length : ]
+    def from_byte_S(self, data_S):
+        print(data_S)
+        label_S = data_S[ 0 : MPLSFrame.label_S_length ]
+        inData_S = data_S[MPLSFrame.label_S_length : ]
         return self(label_S, data_S)
 
 
