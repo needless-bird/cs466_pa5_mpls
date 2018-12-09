@@ -241,13 +241,14 @@ class Router:
         #TODO: implement MPLS forward, or MPLS decapsulation if this is the last hop router for the path
         print('%s: processing MPLS frame "%s"' % (self, m_fr))
 
-        # for now forward the frame out interface 1
+        # Process for MPLS decapsulation. If the router has a decap table we check the MPLS label against the decap table and place it on the corresponding link
         if m_fr.label_S in self.decap_tbl_D:
             out_intf = self.decap_tbl_D[m_fr.label_S]
             pkt_S = m_fr.data_S
             fr = LinkFrame('Network', pkt_S)
             self.intf_L[out_intf].put(fr.to_byte_S(), 'out', True)
             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
+        # If the decap table doesn't have the lable we know that we are not the last hop router, and we look at the forwardinng table to determine where to place the pacekt
         else:
             do = None
             # forward here
