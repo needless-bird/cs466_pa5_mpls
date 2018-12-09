@@ -258,6 +258,7 @@ class Router:
                 self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
                 print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
             except queue.Full:
+                print(list(queue))
                 print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
                 pass
 

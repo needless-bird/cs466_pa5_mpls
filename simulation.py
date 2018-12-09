@@ -34,9 +34,9 @@ if __name__ == '__main__':
     object_L.append(router_a)
 
     #RB
-    encap_tbl_D = {}    
+    encap_tbl_D = {}    #only recieves mpls frames so doesn't encapsulate
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 1}, 'B': {'dest': 'H3', 'outInt': 1}}     
-    decap_tbl_D = {}
+    decap_tbl_D = {}    #is never last hop router so never decapsulates
     router_b = Router(name='RB',
                               intf_capacity_L=[500,500],
                               encap_tbl_D = encap_tbl_D,
@@ -46,9 +46,9 @@ if __name__ == '__main__':
     object_L.append(router_b)
     
     #RC
-    encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
+    encap_tbl_D = {}    # only recieves mpls frames so doesn't encapsulate
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 1}, 'B': {'dest': 'H3', 'outInt': 1}}     # table used to forward MPLS frames
-    decap_tbl_D = {}    # table used to decapsulate network packets from MPLS frames
+    decap_tbl_D = {}    # is never last hop router so never decapsulates
     router_c = Router(name='RC', 
                               intf_capacity_L=[500,500],
                               encap_tbl_D = encap_tbl_D,
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     object_L.append(router_c)
     
     #RD
-    encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
+    encap_tbl_D = {}    #only recieves mpls frames so doesn't encapsulate
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 2}}     # table used to forward MPLS frames
     decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
     router_d = Router(name='RD', 
