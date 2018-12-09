@@ -250,9 +250,10 @@ class Router:
         else:
             out_inft = None   
             for key, val in self.frwd_tbl_D.items():
-                for x, y in val.items():
-                    if x == 'outInt':
-                        out_inft = y
+                if key == m_fr.label_S:
+                    for x, y in val.items():
+                        if x == 'outInt':
+                            out_inft = y
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
                 self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
