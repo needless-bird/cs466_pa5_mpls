@@ -247,7 +247,7 @@ class Router:
             pkt_S = m_fr.data_S
             fr = LinkFrame('Network', pkt_S)
             self.intf_L[out_intf].put(fr.to_byte_S(), 'out', True)
-            #print('%s: forwarding frame "%s" from interface $d to %d' %(self, fr, i, out_intf))
+            print('%s: forwarding frame "%s" from interface $d to %d' %(self, fr, i, out_intf))
         else:
             do = None
             # forward here
