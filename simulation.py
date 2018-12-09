@@ -7,7 +7,7 @@ from copy import deepcopy
 
 ##configuration parameters
 router_queue_size = 0 #0 means unlimited
-simulation_time = 10 #give the network sufficient time to execute transfers
+simulation_time = 30 #give the network sufficient time to execute transfers
 
 if __name__ == '__main__':
     object_L = [] #keeps track of objects, so we can kill their threads at the end
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     encap_tbl_D = {}    
     frwd_tbl_D = {'A':{'dest': 'H1', 'outInt': '1'}, 'B': {'dest': 'H2', 'outInt': '1'}}     
-    decap_tbl_D = {'A': '0', 'B': '1'}    
+    decap_tbl_D = {'A': 1, 'B': 1}
     router_b = Router(name='RB', 
                               intf_capacity_L=[500,100],
                               encap_tbl_D = encap_tbl_D,
