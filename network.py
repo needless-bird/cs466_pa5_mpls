@@ -253,13 +253,13 @@ class Router:
             # forward here
 
 
-        # try:
-        #     fr = LinkFrame('MPLS', m_fr.to_byte_S())
-        #     self.intf_L[1].put(fr.to_byte_S(), 'out', True)
-        #     print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, 1))
-        # except queue.Full:
-        #     print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
-        #     pass
+            try:
+                fr = LinkFrame('MPLS', m_fr.to_byte_S())
+                self.intf_L[1].put(fr.to_byte_S(), 'out', True)
+                print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, 1))
+            except queue.Full:
+                print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
+                pass
 
 
     ## thread target for the host to keep forwarding data
