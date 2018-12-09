@@ -200,6 +200,7 @@ class Router:
             if fr.type_S == "Network":
                 p = NetworkPacket.from_byte_S(pkt_S) #parse a packet out
                 self.process_network_packet(p, i)
+                
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
                 print('$*$* %s $*$* %s' %(pkt_S, self.name))
