@@ -109,7 +109,6 @@ class NetworkPacket:
         dst = byte_S[0 : NetworkPacket.dst_S_length].strip('0')
         priority = byte_S[NetworkPacket.dst_S_length : (NetworkPacket.dst_S_length + 1)]
         data_S = byte_S[(NetworkPacket.dst_S_length + 1) : ]
-        print('*** %s, %s, %s ***' %(dst, priority, data_S))
         return self(dst, data_S, priority)
 
 
@@ -205,8 +204,6 @@ class Router:
 
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
-
-                print('$*$* %s $*$* %s' %(pkt_S, self.name))
                 #m_fr = MPLSFrame('A', "data")
                 m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
                 print("%s label %s data" %(m_fr.label_S, m_fr.data_S))
@@ -250,15 +247,15 @@ class Router:
             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
         # If the decap table doesn't have the lable we know that we are not the last hop router, and we look at the forwardinng table to determine where to place the pacekt
         else:
-            outInt = 1
+            out_inft = 1  #sets to 1 
             for key, val in self.frwd_tbl_D.items():
                 for x, y in val.items():
-                    if x == 'outInt':
-                        outInt = y
-                        print('out interface = %d' %outInt)
+                    if x == 'out_inft':
+                        out_inft = y
+                        print('out interface = %d' %out_inft)
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
-                self.intf_L[1].put(fr.to_byte_S(), 'out', True)
+                self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
                 print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, 1))
             except queue.Full:
                 print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))

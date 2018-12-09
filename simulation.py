@@ -17,10 +17,13 @@ if __name__ == '__main__':
     object_L.append(host_1)
     host_2 = Host('H2')
     object_L.append(host_2)
+    host_3 = Host('H3')
+    object_L.append(host_3)
     
     #create routers and routing tables for connected clients (subnets)
+    #RA
     encap_tbl_D = {'0': 'A', '1': 'B'}    # table used to encapsulate network packets into MPLS frames
-    frwd_tbl_D = {'A':{'dest': 'H1', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     # table used to forward MPLS frames
+    frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 3}}     # table used to forward MPLS frames
     decap_tbl_D = {}    # table used to decapsulate network packets from MPLS frames
     router_a = Router(name='RA', 
                               intf_capacity_L=[500,500],
@@ -30,9 +33,10 @@ if __name__ == '__main__':
                               max_queue_size=router_queue_size)
     object_L.append(router_a)
 
+    #RB
     encap_tbl_D = {}    
-    frwd_tbl_D = {'A':{'dest': 'H1', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     
-    decap_tbl_D = {'A': 1, 'B': 1}
+    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     
+    decap_tbl_D = {}
     router_b = Router(name='RB',
                               intf_capacity_L=[500,100],
                               encap_tbl_D = encap_tbl_D,
@@ -41,14 +45,42 @@ if __name__ == '__main__':
                               max_queue_size=router_queue_size)
     object_L.append(router_b)
     
+    #RC
+    encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
+    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     # table used to forward MPLS frames
+    decap_tbl_D = {}    # table used to decapsulate network packets from MPLS frames
+    router_c = Router(name='RC', 
+                              intf_capacity_L=[500,500],
+                              encap_tbl_D = encap_tbl_D,
+                              frwd_tbl_D = frwd_tbl_D,
+                              decap_tbl_D = decap_tbl_D, 
+                              max_queue_size=router_queue_size)
+    object_L.append(router_c)
+    
+    #RD
+    encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
+    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 2}, 'B': {'dest': 'H2', 'outInt': 2}}     # table used to forward MPLS frames
+    decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
+    router_d = Router(name='RD', 
+                              intf_capacity_L=[500,500],
+                              encap_tbl_D = encap_tbl_D,
+                              frwd_tbl_D = frwd_tbl_D,
+                              decap_tbl_D = decap_tbl_D, 
+                              max_queue_size=router_queue_size)
+    object_L.append(router_d)
+    
     #create a Link Layer to keep track of links between network nodes
     link_layer = LinkLayer()
     object_L.append(link_layer)
     
     #add all the links - need to reflect the connectivity in cost_D tables above
     link_layer.add_link(Link(host_1, 0, router_a, 0))
-    link_layer.add_link(Link(router_a, 1, router_b, 0))
-    link_layer.add_link(Link(router_b, 1, host_2, 0))
+    link_layer.add_link(Link(host_2, 0, router_a, 1))
+    link_layer.add_link(Link(router_a, 2, router_b, 0))
+    link_layer.add_link(Link(router_a, 3, router_c, 0))
+    link_layer.add_link(Link(router_b, 1, router_d, 0))
+    link_layer.add_link(Link(router_c, 1, router_d, 1))
+    link_layer.add_link(Link(router_d, 2, host_3, 0))
     
     
     #start all the objects
