@@ -189,6 +189,7 @@ class Router:
     ## look through the content of incoming interfaces and
     # process data and control packets
     def process_queues(self):
+#         print('length of intf_L for %s: %s' % (self.name, len(self.intf_L)))
         for i in range(len(self.intf_L)):
             fr_S = None #make sure we are starting the loop with a blank frame
             fr_S = self.intf_L[i].get('in') #get frame from interface i
@@ -251,12 +252,9 @@ class Router:
             for key, val in self.frwd_tbl_D.items():
                 for x, y in val.items():
                     if x == 'outInt':
-                        print('Out interface: %d' % y)
                         out_inft = y
-
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
-                print('**out interface: %d**' % out_inft)
                 self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
                 print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
             except queue.Full:

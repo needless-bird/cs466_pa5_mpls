@@ -7,7 +7,7 @@ from copy import deepcopy
 
 ##configuration parameters
 router_queue_size = 0 #0 means unlimited
-simulation_time = 30 #give the network sufficient time to execute transfers
+simulation_time = 10 #give the network sufficient time to execute transfers
 
 if __name__ == '__main__':
     object_L = [] #keeps track of objects, so we can kill their threads at the end
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 3}}     # table used to forward MPLS frames
     decap_tbl_D = {}    # table used to decapsulate network packets from MPLS frames
     router_a = Router(name='RA', 
-                              intf_capacity_L=[500,500],
+                              intf_capacity_L=[500,500, 500, 500],
                               encap_tbl_D = encap_tbl_D,
                               frwd_tbl_D = frwd_tbl_D,
                               decap_tbl_D = decap_tbl_D, 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 2}}     # table used to forward MPLS frames
     decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
     router_d = Router(name='RD', 
-                              intf_capacity_L=[500,100],
+                              intf_capacity_L=[500,500, 500],
                               encap_tbl_D = encap_tbl_D,
                               frwd_tbl_D = frwd_tbl_D,
                               decap_tbl_D = decap_tbl_D, 

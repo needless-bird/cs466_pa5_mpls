@@ -70,8 +70,6 @@ class Link:
         for (node_a, node_a_intf, node_b, node_b_intf) in \
         [(self.node_1, self.node_1_intf, self.node_2, self.node_2_intf), 
          (self.node_2, self.node_2_intf, self.node_1, self.node_1_intf)]:
-            print(node_a,node_a_intf) 
-            print(node_b,node_b_intf)
             intf_a = node_a.intf_L[node_a_intf]
             intf_b = node_b.intf_L[node_b_intf]
             if intf_a.out_queue.empty():
@@ -117,7 +115,6 @@ class LinkLayer:
     ##transfer a packet across all links
     def transfer(self):
         for link in self.link_L:
-            print('Link info: %s' % (link))
             link.tx_pkt()
                 
     ## thread target for the network to keep transmitting data across links
