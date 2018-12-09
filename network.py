@@ -249,10 +249,12 @@ class Router:
             self.intf_L[out_intf].put(fr.to_byte_S(), 'out', True)
             #print('%s: forwarding frame "%s" from interface $d to %d' %(self, fr, i, out_intf))
         else:
-            do = None
-            # forward here
-
-
+            outInt = 1
+            for key, val in self.frwd_tbl_D.items():
+                for x, y in val.items():
+                    if x == 'outInt':
+                        outInt = y
+                        print('out interface = %d' %outInt)
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
                 self.intf_L[1].put(fr.to_byte_S(), 'out', True)
