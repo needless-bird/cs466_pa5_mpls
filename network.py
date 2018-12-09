@@ -63,6 +63,7 @@ class MPLSFrame:
         byte_S += str(self.data_S)
         return byte_S
     #method to convert byte string into MPLSFrame variables
+    @classmethod
     def from_byte_S(self, byte_S):
         print(byte_S)
         label_S = byte_S[0: MPLSFrame.label_S_length ]
@@ -204,8 +205,8 @@ class Router:
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
                 print('$*$* %s $*$* %s' %(pkt_S, self.name))
-                m_fr = MPLSFrame('A', "data")
-                m_fr.from_byte_S(pkt_S) #parse a frame out
+                #m_fr = MPLSFrame('A', "data")
+                m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
                 print("%s label %s data" %(m_fr.label_S, m_fr.data_S))
 
                 #send the MPLS frame for processing
