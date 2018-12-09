@@ -42,6 +42,7 @@ class Interface:
             # print('putting packet in the IN queue')
             self.in_queue.put(pkt, block)
 #class to handle injecting MPLS header into the packet
+
 class MPLSFrame:
     # label length
     label_S_length = 1
@@ -63,6 +64,7 @@ class MPLSFrame:
         byte_S += str(self.data_S)
         return byte_S
     #method to convert byte string into MPLSFrame variables
+    @classmethod
     def from_byte_S(self, data_S):
         print(data_S)
         label_S = data_S[ 0 : MPLSFrame.label_S_length ]
@@ -203,7 +205,9 @@ class Router:
                 
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
+                
                 print('$*$* %s $*$* %s' %(pkt_S, self.name))
+
                 m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
 
                 #send the MPLS frame for processing
