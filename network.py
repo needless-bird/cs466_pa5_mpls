@@ -36,10 +36,10 @@ class Interface:
     # @param block - if True, block until room in queue, if False may throw queue.Full exception
     def put(self, pkt, in_or_out, block=False):
         if in_or_out == 'out':
-            print('putting packet in the OUT queue')
+#             print('putting packet in the OUT queue')
             self.out_queue.put(pkt, block)
         else:
-            print('putting packet in the IN queue')
+#             print('putting packet in the IN queue')
             self.in_queue.put(pkt, block)
 #class to handle injecting MPLS header into the packet
 
@@ -66,7 +66,7 @@ class MPLSFrame:
     #method to convert byte string into MPLSFrame variables
     @classmethod
     def from_byte_S(self, byte_S):
-        print(byte_S)
+#         print(byte_S)
         label_S = byte_S[0: MPLSFrame.label_S_length ]
         data_S = byte_S[MPLSFrame.label_S_length: ]
         return self(label_S, data_S)
@@ -198,17 +198,19 @@ class Router:
             #decapsulate the packet
             fr = LinkFrame.from_byte_S(fr_S)
             pkt_S = fr.data_S
+            
             #process the packet as network, or MPLS
             if fr.type_S == "Network":
                 p = NetworkPacket.from_byte_S(pkt_S) #parse a packet out
+                print('%s: received packed - Priority: %s     Packet: %s' % (self.name, p.priority, pkt_S))
                 self.process_network_packet(p, i)
 
             elif fr.type_S == "MPLS":
                 # TODO: handle MPLS frames
                 #m_fr = MPLSFrame('A', "data")
                 m_fr = MPLSFrame.from_byte_S(pkt_S) #parse a frame out
-                print("%s label %s data" %(m_fr.label_S, m_fr.data_S))
-
+                print('%s: received packed - Label: %s        Packet: %s' % (self.name, m_fr.label_S, pkt_S))
+#                 print("%s label %s data" %(m_fr.label_S, m_fr.data_S))
                 #send the MPLS frame for processing
                 self.process_MPLS_frame(m_fr, i)
             else:
@@ -227,7 +229,7 @@ class Router:
         #Create a new MPLSFrame with the label_S and network packet
         m_fr = MPLSFrame(label_S, pkt)
 
-        print('%s: encapsulated packet "%s" as MPLS frame "%s"' % (self, pkt, m_fr))
+#         print('%s: encapsulated packet "%s" as MPLS frame "%s"' % (self, pkt, m_fr))
         #send the encapsulated packet for processing as MPLS frame
         self.process_MPLS_frame(m_fr, i)
 
@@ -237,7 +239,7 @@ class Router:
     #  @param i Incoming interface number for the frame
     def process_MPLS_frame(self, m_fr, i):
         #TODO: implement MPLS forward, or MPLS decapsulation if this is the last hop router for the path
-        print('%s: processing MPLS frame "%s"' % (self, m_fr))
+#         print('%s: processing MPLS frame "%s"' % (self, m_fr))
 
         # Process for MPLS decapsulation. If the router has a decap table we check the MPLS label against the decap table and place it on the corresponding link
         if m_fr.label_S in self.decap_tbl_D:
@@ -245,7 +247,7 @@ class Router:
             pkt_S = m_fr.data_S
             fr = LinkFrame('Network', pkt_S)
             self.intf_L[out_intf].put(fr.to_byte_S(), 'out', True)
-            print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
+#             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
         # If the decap table doesn't have the lable we know that we are not the last hop router, and we look at the forwardinng table to determine where to place the pacekt
         else:
             out_inft = None   
@@ -257,7 +259,7 @@ class Router:
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
                 self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
-                print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
+#                 print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
             except queue.Full:
                 print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
                 pass

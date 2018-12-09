@@ -62,7 +62,7 @@ if __name__ == '__main__':
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 2}}     # table used to forward MPLS frames
     decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
     router_d = Router(name='RD', 
-                              intf_capacity_L=[500,500, 500],
+                              intf_capacity_L=[500,500, 100],
                               encap_tbl_D = encap_tbl_D,
                               frwd_tbl_D = frwd_tbl_D,
                               decap_tbl_D = decap_tbl_D, 
@@ -92,12 +92,10 @@ if __name__ == '__main__':
         t.start()
     
     #create some send events    
-#     for i in range(5):
-#         priority = i%2
-#         host_1.udt_send('H3', 'MESSAGE_%d_FROM_H1' % i, priority)
-    for i in range(3):
-        host_1.udt_send('H3', 'MESSAGE_%d_FROM_H1' % i, 0)
-        host_2.udt_send('H3', 'MESSAGE_%d_FROM_H2' % i, 1)
+    for i in range(4):
+        priority = i%2
+        host_1.udt_send('H3', 'MESSAGE_%d_FROM_H1' % i, priority)
+        host_2.udt_send('H3', 'MESSAGE_%d_FROM_H2' % i, priority)
         
     #give the network sufficient time to transfer all packets before quitting
     sleep(simulation_time)
