@@ -36,10 +36,10 @@ class Interface:
     # @param block - if True, block until room in queue, if False may throw queue.Full exception
     def put(self, pkt, in_or_out, block=False):
         if in_or_out == 'out':
-            # print('putting packet in the OUT queue')
+            print('putting packet in the OUT queue')
             self.out_queue.put(pkt, block)
         else:
-            # print('putting packet in the IN queue')
+            print('putting packet in the IN queue')
             self.in_queue.put(pkt, block)
 #class to handle injecting MPLS header into the packet
 
@@ -247,16 +247,18 @@ class Router:
             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
         # If the decap table doesn't have the lable we know that we are not the last hop router, and we look at the forwardinng table to determine where to place the pacekt
         else:
-            out_inft = 1  #sets to 1 
+            out_inft = None   
             for key, val in self.frwd_tbl_D.items():
                 for x, y in val.items():
-                    if x == 'out_inft':
+                    if x == 'outInt':
+                        print('Out interface: %d' % y)
                         out_inft = y
-                        print('out interface = %d' %out_inft)
+
             try:
                 fr = LinkFrame('MPLS', m_fr.to_byte_S())
+                print('**out interface: %d**' % out_inft)
                 self.intf_L[out_inft].put(fr.to_byte_S(), 'out', True)
-                print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, 1))
+                print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
             except queue.Full:
                 print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
                 pass

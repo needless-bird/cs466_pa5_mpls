@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     #RB
     encap_tbl_D = {}    
-    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     
+    frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 1}, 'B': {'dest': 'H3', 'outInt': 1}}     
     decap_tbl_D = {}
     router_b = Router(name='RB',
                               intf_capacity_L=[500,500],
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     
     #RC
     encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
-    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 1}, 'B': {'dest': 'H2', 'outInt': 1}}     # table used to forward MPLS frames
+    frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 1}, 'B': {'dest': 'H3', 'outInt': 1}}     # table used to forward MPLS frames
     decap_tbl_D = {}    # table used to decapsulate network packets from MPLS frames
     router_c = Router(name='RC', 
                               intf_capacity_L=[500,500],
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     
     #RD
     encap_tbl_D = {}    # table used to encapsulate network packets into MPLS frames
-    frwd_tbl_D = {'A':{'dest': 'H2', 'outInt': 2}, 'B': {'dest': 'H2', 'outInt': 2}}     # table used to forward MPLS frames
+    frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 2}}     # table used to forward MPLS frames
     decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
     router_d = Router(name='RD', 
                               intf_capacity_L=[500,100],
