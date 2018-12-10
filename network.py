@@ -229,7 +229,7 @@ class Router:
         #Create a new MPLSFrame with the label_S and network packet
         m_fr = MPLSFrame(label_S, pkt)
 
-#         print('%s: encapsulated packet "%s" as MPLS frame "%s"' % (self, pkt, m_fr))
+        print('%s: encapsulated packet "%s" as MPLS frame "%s"' % (self, pkt, m_fr))
         #send the encapsulated packet for processing as MPLS frame
         self.process_MPLS_frame(m_fr, i)
 
@@ -245,6 +245,7 @@ class Router:
         if m_fr.label_S in self.decap_tbl_D:
             out_intf = self.decap_tbl_D[m_fr.label_S]
             pkt_S = m_fr.data_S
+            print('%s: decapsulated packet "%s" as Network frame "%s"' % (self, m_fr, pkt_S))
             fr = LinkFrame('Network', pkt_S)
             self.intf_L[out_intf].put(fr.to_byte_S(), 'out', True)
 #             print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_intf))
