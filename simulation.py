@@ -62,7 +62,7 @@ if __name__ == '__main__':
     frwd_tbl_D = {'A':{'dest': 'H3', 'outInt': 2}, 'B': {'dest': 'H3', 'outInt': 2}}     # table used to forward MPLS frames
     decap_tbl_D = {'A': 2, 'B': 2}    # table used to decapsulate network packets from MPLS frames
     router_d = Router(name='RD', 
-                              intf_capacity_L=[500,500, 100],
+                              intf_capacity_L=[500,500,500],
                               encap_tbl_D = encap_tbl_D,
                               frwd_tbl_D = frwd_tbl_D,
                               decap_tbl_D = decap_tbl_D, 
