@@ -262,6 +262,7 @@ class Router:
 #                 print('%s: forwarding frame "%s" from interface %d to %d' % (self, fr, i, out_inft))
             except queue.Full:
                 print('%s: frame "%s" lost on interface %d' % (self, m_fr, i))
+                print(list(queue))
                 pass
 
 
